@@ -8,7 +8,6 @@ import NotFound from './components/notFound/notFound'
 import Details from './components/details/details'
 import Favorites from './components/Favorites'
 
-
 function App() {
   return (
     <BrowserRouter>
