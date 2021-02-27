@@ -6,10 +6,12 @@ import Search from './search'
 
 
 function Header(){
+   
     return (
     <div className='Header'>
-        <Link to='/'><img src={logo} className='Header-logo' /></Link>
+        <Link to='/'><img src={logo} className='Header-logo' alt='img' /></Link>
         <Search />
+        <button onClick={() => console.log(localStorage.getItem('favorites'))} className="button">Favorites</button>
     </div>
     )
 }

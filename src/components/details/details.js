@@ -14,10 +14,14 @@ class Details extends React.Component{
     }
 
 componentDidMount() {
+    this.fetchCurrency(this.props.match.params.id)
+}
+
+fetchCurrency(currencyId) {
     this.setState({
         loading: true,
     })
-    const currencyId = this.props.match.params.id 
+    // const currencyId = this.props.match.params.id 
     fetch(`https://api.udilia.com/coins/v1/cryptocurrencies/${currencyId}`)
         .then(response => response.ok ? response.json() : Promise.reject)
         .then(data => {
@@ -27,6 +31,13 @@ componentDidMount() {
                 currency: data,
             })
         })
+}
+
+componentWillReceiveProps(nextProps) {
+    // console.log(nextProps, 'nextProps')
+    if(nextProps.match.params.id !== this.props.match.params.id) {
+        this.fetchCurrency(nextProps.match.params.id)
+    }
 }
 
     render(){

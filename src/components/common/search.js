@@ -44,16 +44,23 @@ class Search extends React.Component{
     // handleRedirect = (currency.id) => {
     //     this.props.history
     // }
+    handleRedirect(currencyId) {
+        this.props.history.push(`/currency/${currencyId}`)
+        this.setState({
+            searchQuery: '',
+            searchResults: []
+        }) 
+    }
 
     renderSearchResults() {
-        const {searchQuery, searchResults, loading} = this.state
+        const {searchQuery, searchResults} = this.state
         if(!searchQuery) {
             return null
         } 
         if(searchResults.length > 0) {
             return(
                 <div className='Search-result-container'>
-                    {searchResults.map((result) => (<div className='Search-result' key={result.id}>
+                    {searchResults.map((result) => (<div onClick={() => this.handleRedirect(result.id)} className='Search-result' key={result.id}>
                       {result.name} ({result.symbol})  
                     </div>))}
                 </div>
@@ -85,9 +92,10 @@ class Search extends React.Component{
 
                     />
                     {
-                        loading && <div className='Search-loading'><Loading /></div>
+                        loading && <div className='Search-loading'><Loading width='18px' height='18px' /></div>
                     }
                     {this.renderSearchResults()}
+                    
             </div>
         )
     }

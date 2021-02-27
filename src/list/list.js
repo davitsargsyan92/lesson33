@@ -4,14 +4,20 @@ import Loading from '../components/common/loading'
 import Table from './table'
 import Pagination from './pagination'
 
+
 class List extends React.Component{
-    constructor(){
+    constructor(props){
+        // console.log(props)
+        const queryObject = new URLSearchParams(props.location.search)
         super()
         this.state = {
             cryptocurrencies: [],
             loading: false,
-            page: 1,
-            totalPages: 0
+            page: +queryObject.get('page') || 1,
+            totalPages: 0,
+            perPage: 10,
+            error: null,
+            favorites: []
         }
     }
 
@@ -20,28 +26,76 @@ class List extends React.Component{
             loading: true,
         });
         const {page} = this.state
-        fetch(`https://api.udilia.com/coins/v1/cryptocurrencies?page=${page}&perPage=20`)
-        .then(response => response.ok ? response.json() : Promise.reject)
-        .then(data => {
-            
-            // console.log(data)
-            this.setState({
-                loading: false,
-                cryptocurrencies: data.currencies,
-                totalPages: data.totalPages
+        const {perPage} = this.state
+        fetch(`https://api.udilia.com/coins/v1/cryptocurrencies?page=${page}&perPage=${perPage}`)
+            .then(response => response.ok ? response.json() : Promise.reject(response))
+            .then(data => {
+                
+                console.log(data,'data')
+                this.setState({
+                    loading: false,
+                    cryptocurrencies: data.currencies,
+                    totalPages: data.totalPages
+                })
             })
+            .catch(error => {
+                // console.dir(error, "error")
+                this.setState({
+                    error: true,
+                    loading: false,
+                    cryptocurrencies: []
+                })
         })
      
     }
 
+    // handleFavorites = (currency) => {
+    //     let favList = JSON.parse(localStorage.getItem('favorites'))
+    //     if(favList){
+    //         const isFavlistIncludeCurrentCurrency = favList.some((item) => item.id === currency.id)
+    //         if(isFavlistIncludeCurrentCurrency){
+    //             const filteredItems = favList.filter((item) => item.id !== currency.id)
+    //             localStorage.setItem('favorites', JSON.stringify(filteredItems))
+    //         }else{
+    //             favList.push(currency)
+    //             localStorage.setItem('favorites', JSON.stringify(favList))
+    //         }
+    //     }else{
+    //         const favList = [currency]
+    //         localStorage.setItem('favorites', JSON.stringify(favList))
+    //     }
+        
+
+    // }
+   
+    // handleFavorites = (id) => {   
+    //     let favorites = this.state.favorites 
+    //      this.setState({
+    //             favorites: [...favorites,id]
+    //         })            
+     
+        
+    //     console.log(favorites)
+        
+    // }
+
+
     handlePaginationClick = (direction) => {
         let currentPage = this.state.page;
+        console.log(currentPage)
         currentPage = direction === 'next' ? currentPage + 1 : currentPage - 1;
         this.setState({
             page: currentPage,
         }, this.fetchCurrencies);   // when we want THE FETCH TO WORK AFTER SETSTATE
-        
+        this.props.history.push(`?page=${currentPage}`)
     }
+     
+    handlePerPageChange = (pageSize) => {
+        this.setState({
+            perPage: pageSize
+        },this.fetchCurrencies)
+    }
+
 
     // handlePaginationClickDecrease = () => {
     //     this.setState({
@@ -144,9 +198,12 @@ class List extends React.Component{
         })
 }
 
+    componentWillUnmount(){
+        console.log(localStorage.getItem('favorites'))
+    }
+
     render(){
-        const {loading, cryptocurrencies, page, totalPages} = this.state
-        console.log(this.state)
+        const {loading, cryptocurrencies, page, totalPages, perPage, error} = this.state
         if(loading){ // (this.state.loading)
         return(
             <div className='loading-container'>
@@ -154,6 +211,14 @@ class List extends React.Component{
             </div>
             )
         }
+        if(error) {
+            return (
+                <div>
+                    <h1>ERRor</h1>
+                </div>
+            )
+        }
+        // console.log(cryptocurrencies, 'list')
         return(
             //React.Fragment
             <> 
@@ -163,12 +228,15 @@ class List extends React.Component{
                     handleNameClick={this.handleNameClick}
                     // renderChangePercent={this.renderChangePercent}
                     cryptocurrencies={cryptocurrencies}
+                    // handleFavorites = {this.handleFavorites}
                 />
                 <Pagination 
                     handlePaginationClick = {this.handlePaginationClick} 
                     page = {page}
                     totalPages = {totalPages}
-                
+                    perPage= {perPage}
+                    handlePerPageChange = {this.handlePerPageChange}
+                    currentPerPage = {this.state.perPage}
 
                 />
              </>

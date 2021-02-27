@@ -1,5 +1,6 @@
 .Table-container {
     overflow-x: auto; /* Needed for table to be responsive */
+    display: flex;
   }
   
   .Table {
@@ -31,7 +32,12 @@
     color: #fff;
     cursor: pointer;
   }
-  
+  .Favorite-icon{
+    color: white;
+    /* text-align: center; */
+    margin-left: 2rem ;
+    cursor: pointer;
+  }
   .Table-rank {
     color: #9cb3c9;
     margin-right: 18px;

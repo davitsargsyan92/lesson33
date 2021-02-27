@@ -6,8 +6,8 @@ import List from './list/list'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import NotFound from './components/notFound/notFound'
 import Details from './components/details/details'
+import Favorites from './components/Favorites'
 
-// import MyList from './list/myVersion';
 
 function App() {
   return (
@@ -17,7 +17,9 @@ function App() {
         <Switch>
           <Route path='/' component={List} exact/>
           <Route path='/currency/:id' component={Details} />
+          <Route path='/favorites' component={Favorites} />
           <Route component={NotFound} />
+          
         </Switch>
       </div>
     </BrowserRouter>
