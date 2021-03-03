@@ -1,22 +1,10 @@
+
 .Pagination {
     margin: 50px auto;
     text-align: center;
-  }
-  .select {
-    margin-left: 20px;
-    background: #1f364d;
-    color: white;
-    border-radius: 5px;
-    padding: 4px;
-    border: none;
-  }
-  #cars {
-    font-size: .8rem;
-  }
-  .label {
-    padding-right: 20px;
-  }
-  .Pagination-button {
+}
+
+.Pagination-button {
     text-align: center;
     border: none;
     border-radius: 16px;
@@ -27,22 +15,21 @@
     margin: 10px;
     width: 44px;
     height: 34px;
-  }
-  
-  .Pagination-button:hover {
+}
+
+.Pagination-button:hover {
     background-color: #457cb2;
-  }
-  
-  .Pagination-button:focus {
+}
+
+.Pagination-button:focus {
     outline: none;
-  }
-  
-  .Pagination-button:disabled {
+}
+
+.Pagination-button:disabled {
     background-color: #1f364d;
     cursor: not-allowed;
-  }
-  
-  .Pagination-info {
+}
+
+.Pagination-info {
     font-size: 12px;
-  }
-  
+}
