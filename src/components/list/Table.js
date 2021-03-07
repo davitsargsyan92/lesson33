@@ -1,6 +1,9 @@
 import React from 'react';
+import { withRouter } from "react-router";
+import { renderChangePercent } from "../../helpers"; // HIGHER ORDER COMPONENT (HOC)
 
 const Table = (props) => {
+   const {currencies , history} = props;
     return (
         <div className="Table-container">
             <table className="Table">
@@ -10,14 +13,16 @@ const Table = (props) => {
                     <th>Price</th>
                     <th>Market Cap</th>
                     <th>24H Change</th>
-                    <th> favorite </th>
+                    <th>Favorites</th>
                 </tr>
                 </thead>
                 <tbody className="Table-body">
                 {
 
-                    props.currencies.map(currecy => (
-                        <tr key={currecy.id}>
+                    currencies.map(currecy => (
+                        <tr key={currecy.id} onClick={() => {
+                            history.push(`/currency/${currecy.id}`)
+                        }}>
                             <td >
                                 <span className="Table-rank">{currecy.rank}</span>
                                 {currecy.name}
@@ -31,7 +36,7 @@ const Table = (props) => {
                                 {currecy.marketCap}
                             </td>
                             <td>
-                                {props.renderChangePercent(currecy.percentChange24h)}
+                                {renderChangePercent(currecy.percentChange24h)}
                             </td>
                         </tr>
                     ))
@@ -44,4 +49,4 @@ const Table = (props) => {
     );
 };
 
-export default Table;
+export default withRouter(Table);

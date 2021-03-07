@@ -3,6 +3,9 @@ import './Table.css'
 import Loading from "../common/Loading";
 import Table from './Table'
 import Pagination from "./Pagination";
+import {API_URL} from '../../config'
+import { handleResponse } from "../../helpers";
+
 class List extends React.Component {
 
     constructor(){
@@ -15,21 +18,6 @@ class List extends React.Component {
             totalPages : null
         }
     }
-
-    // handleRightClick = () => {
-    //
-    //     this.setState({
-    //         page : this.state.page + 1
-    //     } , this.fetchCurrencies);
-    //
-    // }
-    //
-    // handleLeftClick = () => {
-    //     this.setState({
-    //         page: this.state.page - 1
-    //     } , this.fetchCurrencies);
-    //
-    // }
 
     handlePaginationClick = direction => {
         let { page } = this.state;
@@ -46,13 +34,8 @@ class List extends React.Component {
             loading: true
         });
         const {page} = this.state;
-        fetch(`https://api.udilia.com/coins/v1/cryptocurrencies?page=${page}&perPage=20`)
-            .then(response => {
-                if(response.ok){
-                    return response.json();
-                }
-                return Promise.reject(response)
-            })
+        fetch(`${API_URL}/cryptocurrencies?page=${page}&perPage=20`)
+            .then(handleResponse)
             .then(data => {
                 this.setState({
                     currencies : data.currencies,
@@ -79,16 +62,8 @@ class List extends React.Component {
     }
 
 
-    renderChangePercent(percent){
-        if(percent > 0){
-            return <span className="percent-raised"> {percent} % &uarr;</span>
-        }
-        else if(percent < 0){
-            return <span className="percent-fallen"> {percent} % &darr;</span>
-        }else{
-            return <span>{percent}</span>
-        }
-    }
+
+
     render() {
 
         const { currencies , loading , error , page  , totalPages} = this.state; // currencies = this.state.currencies
@@ -107,7 +82,7 @@ class List extends React.Component {
 
         return (
             <div>
-                <Table currencies={currencies} renderChangePercent={this.renderChangePercent}/>
+                <Table currencies={currencies}  />
 
                 <Pagination page={page}  totalPages={totalPages} handlePaginationClick={this.handlePaginationClick}/>
 
