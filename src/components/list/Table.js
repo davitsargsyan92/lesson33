@@ -1,9 +1,13 @@
 import React from 'react';
-import { withRouter } from "react-router";
-import { renderChangePercent } from "../../helpers"; // HIGHER ORDER COMPONENT (HOC)
+import { withRouter } from "react-router";// HIGHER ORDER COMPONENT (HOC)
+import { renderChangePercent } from "../../helpers"; 
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md'
+
 
 const Table = (props) => {
-   const {currencies , history} = props;
+   const {currencies , history , onFavoriteClick , favorites} = props;
+
+ 
     return (
         <div className="Table-container">
             <table className="Table">
@@ -13,30 +17,36 @@ const Table = (props) => {
                     <th>Price</th>
                     <th>Market Cap</th>
                     <th>24H Change</th>
-                    <th>Favorites</th>
+                    <th>Favorites </th>
                 </tr>
                 </thead>
                 <tbody className="Table-body">
                 {
 
-                    currencies.map(currecy => (
-                        <tr key={currecy.id} onClick={() => {
-                            history.push(`/currency/${currecy.id}`)
+                    currencies.map(currency => (
+                        <tr key={currency.id} onClick={() => {
+                            history.push(`/currency/${currency.id}`)
                         }}>
                             <td >
-                                <span className="Table-rank">{currecy.rank}</span>
-                                {currecy.name}
+                                <span className="Table-rank">{currency.rank}</span>
+                                {currency.name}
                             </td>
                             <td>
                                 <span className="Table-dollar">$</span>
-                                {currecy.price}
+                                {currency.price}
                             </td>
                             <td>
                                 <span className="Table-dollar">$</span>
-                                {currecy.marketCap}
+                                {currency.marketCap}
                             </td>
                             <td>
-                                {renderChangePercent(currecy.percentChange24h)}
+                                {renderChangePercent(currency.percentChange24h)}
+                            </td>
+
+                            <td onClick={event => onFavoriteClick(event , currency)} > 
+                            {favorites.includes(currency.id) ?  <MdFavorite/> :  <MdFavoriteBorder/>}
+                             
+                            
                             </td>
                         </tr>
                     ))

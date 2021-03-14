@@ -4,7 +4,7 @@ import Loading from "../common/Loading";
 import Table from './Table'
 import Pagination from "./Pagination";
 import {API_URL} from '../../config'
-import { handleResponse } from "../../helpers";
+import { handleResponse, onFavoriteClickCB } from "../../helpers";
 
 class List extends React.Component {
 
@@ -15,7 +15,8 @@ class List extends React.Component {
             currencies : [],
             error: null,
             page: 1,
-            totalPages : null
+            totalPages : null,
+            favorites : JSON.parse(localStorage.getItem("favorites")) || []
         }
     }
 
@@ -61,12 +62,22 @@ class List extends React.Component {
 
     }
 
+    handleFavoriteClick = (event , currency) => {
+        event.stopPropagation();
+
+        this.setState(prevState => onFavoriteClickCB(prevState , currency))
+        
+    }
+
 
 
 
     render() {
 
-        const { currencies , loading , error , page  , totalPages} = this.state; // currencies = this.state.currencies
+        console.log(this.state.favorites , "favorites")
+
+        const { currencies , loading , error , page  , totalPages , favorites} = this.state; // currencies = this.state.currencies
+        const favoriteCurrencyID = favorites.map(item => item.id);
 
 
         if(loading){
@@ -82,7 +93,7 @@ class List extends React.Component {
 
         return (
             <div>
-                <Table currencies={currencies}  />
+                <Table currencies={currencies}  onFavoriteClick={this.handleFavoriteClick} favorites={favoriteCurrencyID}/>
 
                 <Pagination page={page}  totalPages={totalPages} handlePaginationClick={this.handlePaginationClick}/>
 
