@@ -14,9 +14,9 @@ class Detail extends React.Component{
         }
     }
 
-    componentDidMount() {
+    fetchCurrency = (currencyId) => {
         this.setState({loading: true});
-        const currencyId = this.props.match.params.currencyId;
+
         fetch(`${API_URL}/cryptocurrencies/${currencyId}`)
             .then(handleResponse)
             .then(currency => {
@@ -26,11 +26,26 @@ class Detail extends React.Component{
                     loading: false
                 });
             }).catch(() => {
-                this.setState({
-                    loading: false,
-                    error: "Something went wrong"
-                })
+            this.setState({
+                loading: false,
+                error: "Something went wrong"
+            })
         })
+    };
+
+    componentWillReceiveProps(nextProps) {
+
+        if(nextProps.match.params.currencyId !== this.props.match.params.currencyId){
+            const currencyId = nextProps.match.params.currencyId;
+            this.fetchCurrency(currencyId);
+        }
+    }
+
+    componentDidMount() {
+        const currencyId = this.props.match.params.currencyId;
+
+        this.fetchCurrency(currencyId);
+
     }
 
     render() {

@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.png';
 import './Header.css';
 import { Link } from "react-router-dom";
-
+import Search from './Search'
 const Header = () => {
 
     // const handleClick = (event) => {
@@ -24,7 +24,8 @@ const Header = () => {
 
             <Link to="/">
                 <img  src={logo} alt="logo" className="Header-logo"/>
-            </Link>            
+            </Link>
+            <Search/>
               
 
             <Link to='/favorites'> 
